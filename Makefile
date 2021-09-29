@@ -14,13 +14,11 @@ OBJFILES = $(patsubst %.c,%.o,$(SRCFILES))
 OBJS = $(addprefix $(OBJDIR)/,$(OBJFILES))
 
 all: $(OBJDIR)/$(OUTNAME)
-	$(info Copying applets to ${OBJDIR}...)
-	@cp applet-*.bin $(OBJDIR)
 	$(info Done!)
 
 $(OBJDIR)/$(OUTNAME): $(OBJS)
 	$(info Creating $@...)
-	@$(CC) $(CFLAGS) $(OBJS) -o $@
+	@$(CC) $(CFLAGS) $(OBJS) -o $@ -Wl,--format=binary -Wl,applet-mdflash.bin -Wl,--format=default
 	@rm -f $(OBJDIR)/*.o
 
 $(OBJS): | $(OBJDIR)
