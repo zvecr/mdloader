@@ -764,9 +764,9 @@ int main(int argc, char *argv[])
     }
 
     int readbytes=0;
-    for (const uint8_t *byte=applet_data; byte<applet_end; ++byte) {
-        appletbuf[readbytes] = *byte;
-        readbytes++;
+    for (; readbytes < applet_size; readbytes++)
+    {
+        appletbuf[readbytes] = applet_data[readbytes];
     }
 
     if (readbytes != applet_size)
