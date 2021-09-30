@@ -19,6 +19,7 @@
 
 #include "mdloader_common.h"
 #include "mdloader_parser.h"
+#include <inttypes.h>
 
 char verbose;
 char testmode;
@@ -166,8 +167,8 @@ int print_mail(mailbox_t *mail)
     int *pmail = (int *)mail;
 
     printf("Mailbox contents:\n");
-    printf("Command: %i\n", mail->command);
-    printf("Status: %i\n", mail->status);
+    printf("Command: %"PRIu32"\n", mail->command);
+    printf("Status: %"PRIu32"\n", mail->status);
 
     pmail += 2; //Bypass command and status
     for (arg = 0; arg < (sizeof(mailbox_t) / sizeof(int)) - 2; arg++)
@@ -270,7 +271,7 @@ void print_hex_listing(char *data, int binfilesize, int markbyte, int base_addr)
                 printf("|%s|", ascii);
                 if (chrnum > markbyte && !pf)
                 {
-                    printf(" @%i", markbyte % (cols * colw) + 1);
+                    printf(" @%"PRIu32"", markbyte % (cols * colw) + 1);
                     pf = 1;
                 }
                 printf("\n");
@@ -311,7 +312,7 @@ void print_hex_listing(char *data, int binfilesize, int markbyte, int base_addr)
     *pascii = 0;
     printf("|%s|", ascii);
     if (chrnum > markbyte && !pf)
-        printf(" @%i", markbyte % (colw * cols) + 1);
+        printf(" @%"PRIu32"", markbyte % (colw * cols) + 1);
 
     printf("\n\n");
 
@@ -349,12 +350,11 @@ int test_mcu(char silent)
     //Find MCU via device ID
     int8_t mcu_index = -1;
     int8_t mcu_max = sizeof(mcus) / sizeof(mcu_t);
-    int deviceid;
 
     for (mcu_index = 0; mcu_index < mcu_max; mcu_index++)
     {
         mcu = (mcu_t *)&mcus[mcu_index];
-        deviceid = read_word(mcu->cidr_addr);
+        int deviceid = read_word(mcu->cidr_addr);
         if (read_error)
         {
             if (!silent && verbose) printf("Notice: Could not read device ID at %08X!\n", mcu->cidr_addr);
@@ -981,7 +981,7 @@ int main(int argc, char *argv[])
             {
                 if (mail.argument.outputRead.bytesRead != readbytes)
                 {
-                    printf("\nError: Sent bytes != written bytes (%i != %i)\n", readbytes, mail.argument.outputRead.bytesRead);
+                    printf("\nError: Sent bytes != written bytes (%i != %"PRIu32")\n", readbytes, mail.argument.outputRead.bytesRead);
                     free_data(data);
                     goto closePort;
                 }
@@ -990,7 +990,7 @@ int main(int argc, char *argv[])
             {
                 if (mail.argument.outputWrite.bytesWritten != readbytes)
                 {
-                    printf("\nError: Sent bytes != written bytes (%i != %i)\n", readbytes, mail.argument.outputWrite.bytesWritten);
+                    printf("\nError: Sent bytes != written bytes (%i != %"PRIu32")\n", readbytes, mail.argument.outputWrite.bytesWritten);
                     free_data(data);
                     goto closePort;
                 }
@@ -1042,8 +1042,8 @@ int main(int argc, char *argv[])
             //printf("Size: %08X\n", upload_size);
 
             int readbytes = upload_size;
-            int curbytes = initparams.argument.outputInit.bufferSize;
             int memoryOffset = upload_address;
+            uint32_t curbytes = initparams.argument.outputInit.bufferSize;
             while (readbytes > 0)
             {
                 if (curbytes > readbytes) curbytes = readbytes;
@@ -1071,14 +1071,14 @@ int main(int argc, char *argv[])
 
                 if (mail.status != STATUS_OK)
                 {
-                    printf("\nError: Applet status not OK! [%i]\n", mail.status);
+                    printf("\nError: Applet status not OK! [%"PRIu32"]\n", mail.status);
                     free(readbuffer);
                     goto closePort;
                 }
 
                 if (mail.argument.outputRead.bytesRead != curbytes)
                 {
-                    printf("\nError: Sent bytes != written bytes (%i != %i)\n", curbytes, mail.argument.outputRead.bytesRead);
+                    printf("\nError: Sent bytes != written bytes (%"PRIu32" != %"PRIu32")\n", curbytes, mail.argument.outputRead.bytesRead);
                     free(readbuffer);
                     goto closePort;
                 }

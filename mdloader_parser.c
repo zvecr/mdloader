@@ -28,14 +28,8 @@ void free_data(data_t *data)
         return;
     }
 
-    if (data->data)
-    {
-        free(data->data);
-        data->data = NULL;
-    }
-
+    free(data->data);
     free(data);
-    data = NULL;
 }
 
 data_t *create_data(uint32_t data_length)
@@ -136,13 +130,9 @@ data_t *parse_hex(char *rawdata, uint32_t rawlength)
     uint8_t *rds = (uint8_t *)rawdata;
     uint8_t *rde = (uint8_t *)rawdata + rawlength;
     uint8_t *bindata = (uint8_t *)rawdata;
-    hex_record_t *hex;
-    uint8_t *hex_data;
-    uint8_t checksum;
-    uint8_t checksum_given;
     uint16_t line = 0;
     uint32_t binlength = 0;
-    uint8_t byte_count;
+    ;
     uint32_t next_address = 0;
     uint32_t start_segment_address = 0;
     uint8_t start_segment_address_set = 0;
@@ -155,17 +145,17 @@ data_t *parse_hex(char *rawdata, uint32_t rawlength)
             return NULL;
         }
 
-        hex = (hex_record_t *)rds;
+        hex_record_t *hex = (hex_record_t *)rds;
         if (hex->start_code != ':')
         {
             printf("Error: Parser: Hex: Invalid start code! (Line %i)\n",line);
             return NULL;
         }
 
-        checksum = 0;
+        uint8_t checksum = 0;
 
         //Convert byte count to safe storage
-        byte_count = ascii_to_hex(*hex->byte_count, *(hex->byte_count+1));
+        uint8_t byte_count = ascii_to_hex(*hex->byte_count, *(hex->byte_count+1));
         if (hex_conv_error)
         {
             printf("Error: Parser: Hex: Unexpected ASCII in byte count! (Line %i)\n",line);
@@ -206,7 +196,7 @@ data_t *parse_hex(char *rawdata, uint32_t rawlength)
             return NULL;
         }
 
-        hex_data = rds + sizeof(hex_record_t);
+        uint8_t *hex_data = rds + sizeof(hex_record_t);
 
         //Convert data in place
         for (start_offset = 0; start_offset < byte_count * 2; start_offset += 2)
@@ -223,7 +213,7 @@ data_t *parse_hex(char *rawdata, uint32_t rawlength)
         checksum *= -1;
 
         //Convert checksum
-        checksum_given = ascii_to_hex(*(hex_data + start_offset), *(hex_data + start_offset + 1));
+        uint8_t checksum_given = ascii_to_hex(*(hex_data + start_offset), *(hex_data + start_offset + 1));
         if (hex_conv_error)
         {
             printf("Error: Parser: Hex: Unexpected ASCII in checksum byte! (Line %i)\n",line);
@@ -386,12 +376,14 @@ data_t *load_file(char *fname)
         return NULL;
     }
 
+    data_t * ret = NULL;
     if (ftype == FTYPE_HEX)
-        return parse_hex(rawdata, readbytes);
+        ret = parse_hex(rawdata, readbytes);
     else if (ftype == FTYPE_BIN)
-        return parse_bin(rawdata, readbytes);
+        ret = parse_bin(rawdata, readbytes);
     else
         printf("ERROR: Parser: Unknown file type!\n");
 
-    return NULL;
+    free(rawdata);
+    return ret;
 }

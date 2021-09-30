@@ -187,7 +187,6 @@ char *recv_file(int addr, int bytes)
     }
 
     char *pdata = data;
-    long ret;
     int retries = READ_RETRIES;
     int readsize = READ_SIZE;
 
@@ -205,7 +204,7 @@ char *recv_file(int addr, int bytes)
         tcflush(gport,TCIOFLUSH); //Flush any remaining data from a bad read
 
         long writelen = strlen(wbuf);
-        if ((ret = write(gport,wbuf,writelen)) == -1)
+        if ((write(gport,wbuf,writelen)) == -1)
         {
             if (verbose) printf("Error writing port [%s](%s)\n",wbuf,strerror(errno));
             free(data);
@@ -214,6 +213,7 @@ char *recv_file(int addr, int bytes)
 
         usleep(SLEEP_W_MIN + SLEEP_W_CHR * (int)writelen);
 
+        long ret;
         if ((ret = read(gport, pdata, readsize)) == -1)
         {
             if (verbose) printf("Error reading port [%i][%ld](%s)\n",readsize,ret,strerror(errno));
@@ -264,10 +264,7 @@ int send_file(int addr, int bytes, char *data)
     }
 
     char wbuf[] = "!XXXXXXXX,XXXXXXXX#";
-    long ret;
-
     char *pdata = data;
-    long writelen;
     int writesize = WRITE_SIZE;
 
     //Constrain write size to buffer size if it has been reported
@@ -281,7 +278,8 @@ int send_file(int addr, int bytes, char *data)
         sprintf(wbuf,"%c%08x,%08x%c",CMD_SEND_FILE,addr,writesize,CMD_END);
         if (verbose > 0) printf("Write: [%s]\n",wbuf);
 
-        writelen = strlen(wbuf);
+        long writelen = strlen(wbuf);
+        long ret;
         if ((ret = write(gport,wbuf,writelen)) == -1)
         {
             if (verbose) printf("Error writing port [%s](%s)\n",wbuf,strerror(errno));
@@ -420,10 +418,9 @@ int jump_application(void)
     }
 
     char wbuf[] = "!#";
-    long ret;
     long writelen = strlen(wbuf);
     sprintf(wbuf,"%c%c",CMD_LOAD_APP,CMD_END);
-    if ((ret = write(gport,wbuf,writelen)) == -1)
+    if ((write(gport,wbuf,writelen)) == -1)
     {
         printf("Failed! (%s)\n",strerror(errno));
         return 0;
