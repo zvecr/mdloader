@@ -17,6 +17,11 @@
  *  along with Massdrop Loader.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#define INCBIN_PREFIX
+#define INCBIN_STYLE INCBIN_STYLE_SNAKE
+#include "incbin/incbin.h"
+INCBIN(applet, "applet-mdflash.bin");
+
 #include "mdloader_common.h"
 #include "mdloader_parser.h"
 
@@ -751,12 +756,7 @@ int main(int argc, char *argv[])
     print_bootloader_version();
     if (verbose) printf("Device ID: %08X\n", mcu->cidr);
 
-    //Load applet
-    extern uint8_t data[]     asm("_binary_applet_mdflash_bin_start");
-    extern uint8_t data_end[] asm("_binary_applet_mdflash_bin_end");
-    size_t filebytes = (size_t)(data_end - data);
-
-    char *appletbuf = (char *)calloc(filebytes,1);
+    char *appletbuf = (char *)calloc(applet_size,1);
     if (appletbuf == NULL)
     {
         printf("Error: Could not allocate memory for applet file!\n");
@@ -764,12 +764,12 @@ int main(int argc, char *argv[])
     }
 
     int readbytes=0;
-    for (uint8_t *byte=data; byte<data_end; ++byte) {
+    for (const uint8_t *byte=applet_data; byte<applet_end; ++byte) {
         appletbuf[readbytes] = *byte;
         readbytes++;
     }
 
-    if (readbytes != filebytes)
+    if (readbytes != applet_size)
     {
         printf("Error: Applet read error!\n");
         goto closePort;

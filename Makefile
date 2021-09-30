@@ -18,7 +18,7 @@ all: $(OBJDIR)/$(OUTNAME)
 
 $(OBJDIR)/$(OUTNAME): $(OBJS)
 	$(info Creating $@...)
-	@$(CC) $(CFLAGS) $(OBJS) -o $@ -Wl,--format=binary -Wl,applet-mdflash.bin -Wl,--format=default
+	@$(CC) $(CFLAGS) $(OBJS) -o $@
 	@rm -f $(OBJDIR)/*.o
 
 $(OBJS): | $(OBJDIR)
