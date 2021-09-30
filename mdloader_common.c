@@ -756,32 +756,8 @@ int main(int argc, char *argv[])
     print_bootloader_version();
     if (verbose) printf("Device ID: %08X\n", mcu->cidr);
 
-    char *appletbuf = (char *)calloc(applet_size,1);
-    if (appletbuf == NULL)
-    {
-        printf("Error: Could not allocate memory for applet file!\n");
-        goto closePort;
-    }
 
-    int readbytes=0;
-    for (; readbytes < applet_size; readbytes++)
-    {
-        appletbuf[readbytes] = applet_data[readbytes];
-    }
-
-    if (readbytes != applet_size)
-    {
-        printf("Error: Applet read error!\n");
-        goto closePort;
-    }
-
-    if (readbytes < sizeof(appinfo_t))
-    {
-        printf("Error: Applet binary too small!\n");
-        goto closePort;
-    }
-
-    memcpy(&appinfo, appletbuf + readbytes - sizeof(appinfo_t), sizeof(appinfo_t));
+    memcpy(&appinfo, applet_data + applet_size - sizeof(appinfo_t), sizeof(appinfo_t));
     if (appinfo.magic != 0x4142444D)
     {
         printf("Error: Applet info not found!\n");
@@ -797,16 +773,13 @@ int main(int argc, char *argv[])
     //printf("Applet data:\n");
     //print_hex_listing(appletbuf, readbytes, 0, 0);
 
-    if (verbose) printf("Applet size: %i\n", readbytes);
+    if (verbose) printf("Applet size: %i\n", applet_size);
 
-    if (!send_file(appinfo.load_addr, readbytes, appletbuf))
+    if (!send_file(appinfo.load_addr, applet_size, (char*)applet_data))
     {
         printf("Error: Could not send applet!\n");
-        free(appletbuf);
         goto closePort;
     }
-
-    free(appletbuf);
 
     //printf("Applet data in RAM:\n");
     //char *data_recv = recv_file(appinfo.load_addr, readbytes);
