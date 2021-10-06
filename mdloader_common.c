@@ -485,7 +485,7 @@ uint8_t configure_smarteeprom(void)
 
     if(ignore_smarteeprom_config)
     {
-        printf("SmartEEPROM: Your settings do not match the recommended values. Skipped!");
+        printf("SmartEEPROM: Your settings do not match the recommended values - Some functionality may not work as expected!");
         return 1;
     }
 
