@@ -469,7 +469,7 @@ int close_port(char silent)
 //Return 1 on sucess, 0 on failure
 int config_port(void)
 {
-    DCB dcb = {};
+    DCB dcb = {0};
 
     if (verbose) printf("Configuring port... \n");
 

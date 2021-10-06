@@ -463,14 +463,14 @@ int set_terminal_mode(void)
 //Display program version
 void display_version(void)
 {
-    printf(PROGRAM_NAME " %i.%02i\n", VERSION_MAJOR, VERSION_MINOR);
+    printf(PROJECT_NAME " " PROJECT_VER "\n");
     printf("\n");
 }
 
 //Display program copyright
 void display_copyright(void)
 {
-    printf(PROGRAM_NAME "  Copyright (C) 2018-2020 Massdrop Inc.\n");
+    printf(PROJECT_NAME "  Copyright (C) 2018-2020 Massdrop Inc.\n");
     printf("This program is Free Software and has ABSOLUTELY NO WARRANTY\n");
     printf("\n");
 }

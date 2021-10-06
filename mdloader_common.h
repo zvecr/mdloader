@@ -20,9 +20,7 @@
 #ifndef _MDLOADER_COMMON_H
 #define _MDLOADER_COMMON_H
 
-#define PROGRAM_NAME  "Massdrop Loader"
-#define VERSION_MAJOR 1
-#define VERSION_MINOR 5 //0-99
+#include "config.h"
 
 #ifdef _WIN32
 #define INITGUID
