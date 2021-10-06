@@ -8,7 +8,7 @@
 
 4. Run the following command:
 ```
-    mdloader --first --download FILE_NAME --restart
+mdloader --first --download FILE_NAME --restart
 ```
 **Note**: Replace `FILE_NAME` with the filename of your compiled firmware.
 
@@ -55,10 +55,11 @@ Massdrop keyboard's featuring Microchip's SAM-BA bootloader.
 
 Enter mdloader directory where Makefile is located and execute:
 
-`make`
+```
+make
+```
 
-This will create a `build` directory with the compiled executable.  
-Run `./build/mdloader` to test.
+This will create a `build` directory with the compiled executable. Run `./build/mdloader` to test.
 
 ## Usage
 ```
@@ -81,7 +82,9 @@ Usage: mdloader [options] ...
 
 To write firmware to the device and restart it:
 
-`mdloader --first --download new_firmware.hex --restart`
+```
+mdloader --first --download new_firmware.hex --restart`
+```
 
 The program will now be searching for your device. Press the reset switch found through the small hole on the back case or by appropriate key sequence to enter programming mode and allow programming to commence.  
 Firmware may be provided as a binary ending in .bin or an Intel HEX format ending in .hex, but .hex is preferred for data integrity.  
@@ -89,12 +92,14 @@ Note that safeguards are in place to prevent overwriting the bootloader section 
 
 To read firmware from the device:
 
-`mdloader --first --upload read_firmware.bin --addr 0x4000 --size 0x10000`
+```
+mdloader --first --upload read_firmware.bin --addr 0x4000 --size 0x10000
+```
 
-Where --addr and --size are set as desired.  
+Where `--addr` and `--size` are set as desired.  
 Note the output of reading firmware will be in binary format.
 
-Test mode may be invoked with the --test switch to test operations while preventing firmware modification.  
+Test mode may be invoked with the `--test` switch to test operations while preventing firmware modification.  
 Test mode also allows viewing of binary data from a read instead of writing to a file.
 
 ## Troubleshooting
