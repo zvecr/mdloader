@@ -4,15 +4,17 @@
 
 2. Plug in your keyboard.
 
-3. In your terminal, change to the directory where you downloaded the executable and applet-*.bin file(s).
+3. In your terminal, change to the directory where you downloaded the executable file.
 
-4. **Windows** - Run `mdloader_windows.exe --first --download FILE_NAME --restart`. Replace "FILE_NAME" with the filename of your compiled firmware.  
-**Linux** - Run `mdloader_linux --first --download FILE_NAME --restart`. Replace "FILE_NAME" with the filename of your compiled firmware. Depending on your user's permissions, you might have to add your user to the `dialout` group or use `sudo` on the command.  
-**Mac** - Run `mdloader_mac --first --download FILE_NAME --restart`.  If you downloaded with Mac Safari, run `mdloader_mac.dms --first --download FILE_NAME --restart`. Replace "FILE_NAME" with the filename of your compiled firmware. 
-  
-5. You should see the message:  
+4. Run the following command:
 ```
-Scanning for device for 60 seconds  
+    mdloader --first --download FILE_NAME --restart
+```
+**Note**: Replace `FILE_NAME` with the filename of your compiled firmware.
+
+5. You should see the message:
+```
+Scanning for device for 60 seconds
 .....
 ```
 
@@ -25,7 +27,6 @@ Device port: /dev/cu.usbmodem234431 (SAMD51J18A)
 Opening port '/dev/cu.usbmodem234431'... Success!
 Found MCU: SAMD51J18A
 Bootloader version: v2.18Sep  4 2018 16:48:28
-Applet file: applet-flash-samd51j18a.bin
 Applet Version: 1
 Writing firmware... Complete!
 Booting device... Success!
@@ -42,9 +43,9 @@ Massdrop Loader is used to read firmware from and write firmware to Massdrop key
 
 ## Supported operating systems
 
-Windows XP or greater (32-bit and 64-bit versions, USB Serial driver in drv_win folder)  
-Linux x86 (32-bit and 64-bit versions)  
-Mac OS X
+- Windows XP or greater (32-bit and 64-bit versions, USB Serial driver in drv_win folder)
+- Linux x86 (32-bit and 64-bit versions)
+- Mac OS X
 
 ## Supported devices
 
@@ -52,13 +53,12 @@ Massdrop keyboard's featuring Microchip's SAM-BA bootloader.
 
 ## Building
 
-Enter mdloader directory where Makefile is located and excute:
+Enter mdloader directory where Makefile is located and execute:
 
 `make`
 
-This will create a `build` directory with the compiled executable and required applet-*.bin files.  
+This will create a `build` directory with the compiled executable.  
 Run `./build/mdloader` to test.
-Note that the target MCU applet file must exist in the directory the executable is called from.
 
 ## Usage
 ```
