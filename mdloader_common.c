@@ -386,6 +386,7 @@ int test_mcu(char silent)
 static void sleep_between_writes(void)
 {
     printf(".");
+    fflush(stdout);
     slp(SLEEP_BETWEEN_WRITES);
 }
 
