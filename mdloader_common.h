@@ -204,9 +204,9 @@ void strlower(char *str);
 
 #define SLEEP_BETWEEN_WRITES 200
 
-// Configured for 2048 bytes - DS60001507E-page 653
+// Configured for 4096 bytes - DS60001507E-page 653
 #define SMARTEEPROM_TARGET_SBLK 1 // 1 block
-#define SMARTEEPROM_TARGET_PSZ 2  // 16 bytes
+#define SMARTEEPROM_TARGET_PSZ 3  // 32 bytes
 
 typedef union {
     struct {
