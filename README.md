@@ -8,7 +8,7 @@
 
 4. Run the following command:
 ```
-mdloader --first --download FILE_NAME --restart
+./mdloader --first --download FILE_NAME --restart
 ```
 **Note**: Replace `FILE_NAME` with the filename of your compiled firmware.
 
