@@ -1,7 +1,7 @@
 OUTNAME = mdloader
 OBJDIR = build
 CC = gcc
-CFLAGS = -Wall -std=gnu99
+CFLAGS = -Wall -std=gnu99 -flto
 
 SRCFILES = mdloader_common.c mdloader_parser.c
 ifeq ($(OS),Windows_NT)
@@ -18,7 +18,7 @@ all: $(OBJDIR)/$(OUTNAME)
 
 $(OBJDIR)/$(OUTNAME): $(OBJS)
 	$(info Creating $@...)
-	@$(CC) $(CFLAGS) $(OBJS) -o $@
+	@$(CC) -s $(CFLAGS) $(OBJS) -o $@
 	@rm -f $(OBJDIR)/*.o
 
 $(OBJS): | $(OBJDIR)
